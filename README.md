@@ -410,7 +410,7 @@ Checklists cobrem apenas os dois quadrantes da esquerda.
 
 **Referências base:**
 > **[CLÁSSICO]** Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning* (2nd ed.). Springer. URL: https://hastie.su.domains/ElemStatLearn/
-
+>
 > **[CLÁSSICO]** Bishop, C. M. (2006). *Pattern Recognition and Machine Learning.* Springer.
 
 **Perguntas diagnósticas:**
@@ -429,9 +429,9 @@ Checklists cobrem apenas os dois quadrantes da esquerda.
 
 **Referências base:**
 > **[CLÁSSICO]** Feathers, M. (2004). *Working Effectively with Legacy Code.* Prentice Hall.
-
+>
 > **[CLÁSSICO]** Martin, R. C. (2008). *Clean Code.* Prentice Hall.
-
+>
 > **[PEER-REVIEWED]** Breck et al. (2017), op. cit.
 
 **Perguntas diagnósticas:**
@@ -449,9 +449,9 @@ Checklists cobrem apenas os dois quadrantes da esquerda.
 
 **Referências base:**
 > **[PEER-REVIEWED]** Sculley et al. (2015), op. cit.
-
+>
 > **[PEER-REVIEWED]** Breck et al. (2017), op. cit.
-
+>
 > **[INDUSTRIAL]** Beyer, B. et al. (2016). *Site Reliability Engineering.* O'Reilly. URL: https://sre.google/sre-book/
 
 **Perguntas diagnósticas:**
@@ -481,7 +481,7 @@ A pergunta 5 é a mais crítica — é *distribution shift*, o modo de falha mai
 
 **Referências base:**
 > **[PEER-REVIEWED]** Kruger & Dunning (1999), op. cit.
-
+>
 > **[PEER-REVIEWED]** Ericsson et al. (1993), op. cit.
 
 **Perguntas diagnósticas:**
