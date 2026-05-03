@@ -25,17 +25,18 @@ Nenhuma afirmação central deste guia depende exclusivamente de fontes disputad
 
 1. [Introdução e Reformulação do Problema](#1-introdução-e-reformulação-do-problema)
 2. [Erros Comuns: O Que Sênior NÃO É](#2-erros-comuns-o-que-sênior-não-é)
-3. [O Modelo Real: Seis Dimensões Constitutivas](#3-o-modelo-real-seis-dimensões-constitutivas)
-4. [Sênior vs. Especialista: Uma Distinção Necessária](#4-sênior-vs-especialista-uma-distinção-necessária)
-5. [A Armadilha Sênior: Onde Pessoas Competentes Estacionam](#5-a-armadilha-sênior-onde-pessoas-competentes-estacionam)
-6. [Implicações Específicas para ML/IA e Ciência de Dados](#6-implicações-específicas-para-mlia-e-ciência-de-dados)
-7. [Frameworks de Auto-Diagnóstico: O Que Existe](#7-frameworks-de-auto-diagnóstico-o-que-existe)
-8. [O Problema Estrutural: O Que os Frameworks Não Resolvem](#8-o-problema-estrutural-o-que-os-frameworks-não-resolvem)
-9. [Mapa de Auto-Diagnóstico: Os Seis Eixos](#9-mapa-de-auto-diagnóstico-os-seis-eixos)
-10. [Perfil Diagnóstico: Caso Aplicado](#10-perfil-diagnóstico-caso-aplicado)
-11. [Plano de Prioridades: O Que Atacar e Em Que Ordem](#11-plano-de-prioridades-o-que-atacar-e-em-que-ordem)
-12. [Como Usar Este Guia na Prática](#12-como-usar-este-guia-na-prática)
-13. [Referências Completas](#13-referências-completas)
+3. [Fundamentos Estruturais: Algoritmização e Arquitetura de Sistemas](#3-fundamentos-estruturais-algoritmização-e-arquitetura-de-sistemas)
+4. [O Modelo Real: Seis Dimensões Constitutivas](#4-o-modelo-real-seis-dimensões-constitutivas)
+5. [Sênior vs. Especialista: Uma Distinção Necessária](#5-sênior-vs-especialista-uma-distinção-necessária)
+6. [A Armadilha Sênior: Onde Pessoas Competentes Estacionam](#6-a-armadilha-sênior-onde-pessoas-competentes-estacionam)
+7. [Implicações Específicas para ML/IA e Ciência de Dados](#7-implicações-específicas-para-mlia-e-ciência-de-dados)
+8. [Frameworks de Auto-Diagnóstico: O Que Existe](#8-frameworks-de-auto-diagnóstico-o-que-existe)
+9. [O Problema Estrutural: O Que os Frameworks Não Resolvem](#9-o-problema-estrutural-o-que-os-frameworks-não-resolvem)
+10. [Mapa de Auto-Diagnóstico: Os Seis Eixos](#10-mapa-de-auto-diagnóstico-os-seis-eixos)
+11. [Perfil Diagnóstico: Caso Aplicado](#11-perfil-diagnóstico-caso-aplicado)
+12. [Plano de Prioridades: O Que Atacar e Em Que Ordem](#12-plano-de-prioridades-o-que-atacar-e-em-que-ordem)
+13. [Como Usar Este Guia na Prática](#13-como-usar-este-guia-na-prática)
+14. [Referências Completas](#14-referências-completas)
 
 ---
 
@@ -106,11 +107,362 @@ Breadth de ferramentas é facilmente adquirível e altamente substituível por d
 
 ---
 
-## 3. O Modelo Real: Seis Dimensões Constitutivas
+## 3. Fundamentos Estruturais: Algoritmização e Arquitetura de Sistemas
+
+Esta seção estabelece dois dos pré-requisitos mais fundamentais e frequentemente mal compreendidos do desenvolvimento de software de nível sênior: a distinção precisa entre **algoritmização** e **arquitetura de sistemas**, e a relação estrutural entre elas. A confusão entre os dois conceitos é uma das causas mais recorrentes de decisões de design incorretas — e uma das mais difíceis de diagnosticar porque o erro frequentemente *funciona* no curto prazo.
+
+### 3.1 A Pergunta Central
+
+Os dois domínios respondem a perguntas fundamentalmente diferentes:
+
+```
+ALGORITMIZAÇÃO responde:
+  "Como resolver este problema computacionalmente —
+   de forma correta, eficiente e verificável?"
+
+ARQUITETURA responde:
+  "Como organizar os componentes que resolvem problemas
+   para que o sistema como um todo seja confiável,
+   modificável, seguro e compreensível?"
+```
+
+Um não substitui o outro. Um sistema pode ter algoritmos matematicamente perfeitos e arquitetura catastroficamente ruim — e vice-versa. Um sênior ou especialista domina ambos e, criticamente, sabe qual nível de abstração uma dada decisão pertence.
+
+---
+
+### 3.2 Algoritmização: Definição Precisa
+
+**Referência fundacional:**
+
+> **[CLÁSSICO]**
+> Knuth, D. E. (1997). *The Art of Computer Programming, Vol. 1: Fundamental Algorithms* (3rd ed.). Addison-Wesley.
+
+Knuth define **algoritmo** como uma sequência finita e bem definida de operações que transforma um input em um output, satisfazendo cinco propriedades:
+
+| Propriedade | Definição Formal |
+|------------|-----------------|
+| **Finitude** | O algoritmo termina após um número finito de passos |
+| **Definição precisa** | Cada passo é especificado sem ambiguidade |
+| **Input** | Zero ou mais quantidades fornecidas antes do início |
+| **Output** | Uma ou mais quantidades produzidas como resultado |
+| **Efetividade** | Cada operação é suficientemente básica para ser executada por um agente |
+
+Algoritmização é, portanto, o processo de **especificar a solução computacional para um problema bem delimitado**. O escopo é *local*: um algoritmo resolve um problema específico dentro de um contexto bem definido.
+
+**As perguntas centrais da algoritmização são:**
+
+- Este algoritmo está correto para *todos* os inputs válidos? (corretude)
+- Qual é a sua complexidade de tempo e espaço? (eficiência)
+- Como ele se comporta nos casos de fronteira? (robustez)
+- Existe um algoritmo assintoticamente superior para este problema? (otimização)
+
+> **[CLÁSSICO]**
+> Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2009). *Introduction to Algorithms* (3rd ed.). MIT Press.
+> — A referência canônica para análise de algoritmos. Define formalmente a análise de complexidade, notação assintótica e provas de corretude que fundamentam o raciocínio algorítmico rigoroso.
+
+---
+
+### 3.3 Arquitetura de Sistemas: Definição Precisa
+
+**Referência fundacional:**
+
+> **[CLÁSSICO]**
+> Bass, L., Clements, P., & Kazman, R. (2021). *Software Architecture in Practice* (4th ed.). Addison-Wesley.
+> — Definição canônica: *"The software architecture of a system is the set of structures needed to reason about the system, which comprises software elements, relations among them, and properties of both."*
+
+> **[CLÁSSICO]**
+> Brooks, F. P. (1975). *The Mythical Man-Month.* Addison-Wesley.
+> — Brooks distingue **arquitetura** (o que o sistema faz — suas interfaces e comportamentos externamente visíveis) de **implementação** (como ele faz — os mecanismos internos). Arquitetura é a especificação de comportamento externo; implementação inclui os algoritmos.
+
+> **[CLÁSSICO]**
+> Martin, R. C. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design.* Prentice Hall.
+> — *"The architecture of a software system is the shape given to that system by those who build it. The purpose of that shape is to facilitate the development, deployment, operation, and maintenance of the software system contained within it."*
+
+O escopo da arquitetura é *global*: ela raciocina sobre o sistema inteiro, definindo as propriedades emergentes que nenhum componente individual possui isoladamente — como disponibilidade, modificabilidade, segurança sistêmica e observabilidade.
+
+**As quatro categorias de decisão arquitetural:**
+
+```
+1. DECOMPOSIÇÃO
+   Quais são as unidades de responsabilidade do sistema?
+   Quais limites separam um componente do outro?
+
+2. COMUNICAÇÃO
+   Como os componentes trocam informação?
+   (síncrono/assíncrono, push/pull, contratos de interface)
+
+3. DADOS
+   Onde vivem os dados? Quem pode lê-los e modificá-los?
+   Como a consistência é mantida entre componentes?
+
+4. FALHA
+   O que acontece quando um componente falha?
+   A falha é catastrófica ou o sistema degrada graciosamente?
+```
+
+**O que torna arquitetura diferente em natureza:**
+
+> **[CLÁSSICO]**
+> Bass, Clements & Kazman (2021), op. cit.
+> — *"Architecture is the earliest point at which quality attribute requirements can be addressed. If you get the architecture wrong, no amount of algorithmic optimization will save you."*
+
+Decisões arquiteturais têm três propriedades que as distinguem de decisões algorítmicas:
+
+- **São difíceis de reverter:** mudar um algoritmo dentro de um componente é refatoração local. Mudar como dois componentes se comunicam pode exigir reescrever ambos e todos os dependentes.
+- **Determinam as propriedades emergentes:** performance, disponibilidade, segurança e modificabilidade não emergem de algoritmos individuais — emergem da arquitetura.
+- **São comunicação:** uma arquitetura existe para ser compreendida por humanos, não apenas executada por máquinas.
+
+---
+
+### 3.4 A Intersecção Topológica: O Ponto de Convergência com o Pensamento Matemático
+
+Esta subseção apresenta o argumento mais importante — e mais frequentemente ignorado — sobre a relação entre fundamentos matemáticos e raciocínio arquitetural: **eles não são modos de pensar distintos; são o mesmo modo de pensar aplicado a espaços com estruturas diferentes**.
+
+#### O que a Topologia Formalmente Captura
+
+> **[CLÁSSICO]**
+> Munkres, J. R. (2000). *Topology* (2nd ed.). Prentice Hall.
+> — Uma topologia sobre um conjunto X é uma coleção τ de subconjuntos de X (os "abertos") satisfazendo: ∅ ∈ τ, X ∈ τ, uniões arbitrárias de elementos de τ estão em τ, interseções finitas de elementos de τ estão em τ.
+
+A topologia captura a **estrutura mínima necessária e suficiente** para definir conceitos como continuidade, convergência e conectividade — sem precisar de métricas, coordenadas ou qualquer estrutura adicional. Dois espaços topológicos homeomórficos são indistinguíveis topologicamente, independentemente de como "parecem" geometricamente.
+
+A intuição fundamental da topologia é: *"quais são as informações mínimas necessárias e suficientes para raciocinar sobre este espaço?"* — e é precisamente essa intuição que define o que é arquitetura de sistemas.
+
+#### A Correspondência Estrutural
+
+A definição canônica de Bass, Clements & Kazman diz que arquitetura é *"o conjunto de estruturas necessárias para raciocinar sobre o sistema"*. Isso é topológico em natureza — é a coleção mínima de estruturas que preserva o suficiente do sistema para raciocínio sobre suas propriedades relevantes.
+
+| Conceito Topológico | Análogo Arquitetural |
+|---------------------|---------------------|
+| Espaço topológico (X, τ) | Sistema + conjunto de suas relações estruturais |
+| Abertos (conjuntos em τ) | Componentes e suas fronteiras de responsabilidade |
+| Homeomorfismo | Refatoração que preserva comportamento externo observável |
+| Invariante topológico | Propriedade de qualidade preservada por mudanças internas |
+| Axiomas de separação (T₀, T₁, T₂) | Grau de isolamento entre componentes |
+| Conectividade | Reachability no grafo de dependências entre módulos |
+| Espaço quociente | Abstração: múltiplos componentes vistos como um único módulo |
+
+O conceito de **invariante topológico** é especialmente relevante para engenharia: em topologia, um invariante é uma propriedade preservada por homeomorfismos. Em arquitetura, as propriedades de qualidade (disponibilidade, throughput, modificabilidade) são os invariantes que devem ser preservados por refatorações — mesmo quando a implementação interna muda completamente. Um sênior raciocina sobre *quais* invariantes preservar em cada decisão de design.
+
+#### Por Que Esta Perspectiva É Correta — e Precisa
+
+A perspectiva topológica não é uma analogia poética. É estruturalmente defensável: a definição canônica de arquitetura é, literalmente, sobre identificar a estrutura mínima necessária e suficiente para raciocinar sobre um sistema — que é exatamente a questão central da topologia.
+
+A diferença entre os dois domínios não é de *tipo de raciocínio*, mas de *estrutura do espaço* ao qual o raciocínio se aplica.
+
+---
+
+### 3.5 A Distinção Crítica: Topologia Arquitetural vs. Regras de Negócio (O Fibrado)
+
+Esta é a contribuição mais precisa ao modelo topológico aplicado a sistemas: em topologia pura, dois espaços homeomórficos são **equivalentes** — não há nada mais a dizer sobre eles além da estrutura. Em arquitetura de sistemas, dois sistemas com a mesma topologia (mesma estrutura de componentes e relações) mas regras de negócio diferentes são sistemas **completamente distintos** em valor e comportamento.
+
+Matematicamente, isso se expressa como uma estrutura de **fibrado** (*fiber bundle*):
+
+> **[CLÁSSICO — Matemática]**
+> Steenrod, N. (1951). *The Topology of Fibre Bundles.* Princeton University Press.
+> — Um fibrado é uma estrutura (E, B, F, π) onde E é o espaço total, B é a base, F é a fibra, e π: E → B é a projeção. Localmente, E se parece com B × F.
+
+```
+SISTEMA = BASE (topologia arquitetural)
+        × FIBRA (regras de negócio por componente)
+
+Exemplo:
+BASE:   Feature Extractor → Model → API Response
+FIBRA:  O que cada componente calcula e como falha graciosamente
+```
+
+A topologia arquitetural é a **base** — ela define como os componentes se relacionam estruturalmente. As regras de negócio são a **fibra** — elas definem o que cada componente *faz* dentro dessa estrutura.
+
+Em matemática pura, a topologia abstrai a fibra completamente. Em engenharia de sistemas, a fibra é onde reside o valor — e é justamente por isso que a topologia arquitetural sozinha não é suficiente para especificar um sistema, embora seja necessária. **A arquitetura define o espaço de possibilidades; as regras de negócio selecionam o ponto específico nesse espaço.**
+
+---
+
+### 3.6 Limites Reais da Analogia: Onde a Topologia Clássica Não Alcança
+
+Para ser epistemicamente honesto: há duas dimensões em que a topologia clássica não captura completamente a arquitetura de sistemas, exigindo estruturas matemáticas adicionais.
+
+#### Dinamicidade e Estado: O π-Cálculo
+
+Topologia clássica estuda espaços *estáticos*. Sistemas de software têm topologia que muda durante a execução — workers são criados e destruídos, conexões são abertas e fechadas, a estrutura de comunicação entre componentes se reconfigura em runtime.
+
+Para capturar isso formalmente:
+
+> **[PEER-REVIEWED]**
+> Milner, R. (1999). *Communicating and Mobile Systems: The π-Calculus.* Cambridge University Press.
+> — O π-cálculo foi desenvolvido precisamente para modelar sistemas concorrentes com **topologia dinâmica** — onde os próprios canais de comunicação podem ser passados como valores, alterando a estrutura de conectividade em runtime.
+
+O π-cálculo generaliza o Cálculo de Processos Comunicantes (CCS) de Milner adicionando a mobilidade de canais. É a ferramenta matemática correta para raciocinar sobre sistemas como pipelines async com threadpool — onde a topologia de comunicação é ela própria computada dinamicamente.
+
+#### Trade-offs e a Estrutura Métrica do Espaço de Arquiteturas
+
+Em arquitetura, decisões não são apenas corretas ou incorretas topologicamente — elas têm *custos* que podem ser ordenados e comparados. Isso implica uma estrutura mais rica que uma topologia pura: algo próximo de um espaço métrico sobre o espaço de arquiteturas possíveis.
+
+> **[PEER-REVIEWED]**
+> Kazman, R., Abowd, G., Bass, L., & Clements, P. (1996). *Scenario-Based Analysis of Software Architecture.* IEEE Software, 13(6), 47–55.
+> DOI: 10.1109/52.542294
+> — Introduziu o método ATAM (Architecture Tradeoff Analysis Method), que formaliza a análise de trade-offs entre atributos de qualidade arquiteturais como um problema de otimização multi-objetivo sobre o espaço de arquiteturas possíveis.
+
+O teorema CAP (Brewer, 2000) é o exemplo mais conhecido desta estrutura métrica:
+
+> **[PEER-REVIEWED]**
+> Gilbert, S., & Lynch, N. (2002). *Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services.* ACM SIGACT News, 33(2), 51–59.
+> DOI: 10.1145/564585.564601
+> — Demonstra formalmente que um sistema distribuído não pode simultaneamente garantir Consistência, Disponibilidade e Tolerância a Partições. Este é um invariante arquitetural com prova matemática formal — o tipo mais raro e mais valioso de conhecimento arquitetural.
+
+---
+
+### 3.7 Como a Distinção Algoritmização/Arquitetura Se Manifesta em Testes Automatizados
+
+Esta é a ponte direta entre os fundamentos e as boas práticas de testes. A distinção não é teórica — ela determina *o que* precisa ser testado e *como*.
+
+**Testes de algoritmos** verificam corretude local e eficiência de uma unidade isolada:
+
+```python
+# Teste algorítmico — verifica corretude do cálculo de entropia
+def test_entropia_string_uniforme_eh_maxima():
+    """Propriedade: string com caracteres equiprováveis maximiza entropia."""
+    url_uniforme = "abcdefgh.com"
+    resultado = calcular_entropia(url_uniforme)
+    assert resultado == pytest.approx(3.0, rel=1e-3)
+
+def test_entropia_string_constante_eh_zero():
+    """Propriedade: string com um único caractere tem entropia zero."""
+    assert calcular_entropia("aaaaaaa.com") == pytest.approx(0.0, abs=1e-9)
+```
+
+**Testes de arquitetura** verificam propriedades emergentes, contratos entre componentes e comportamento sob falha:
+
+```python
+# Teste arquitetural — verifica que a falha de um componente
+# não propaga catastroficamente para o sistema inteiro
+def test_pipeline_degrada_graciosamente_quando_dns_falha():
+    """Invariante arquitetural: falha no DNS Resolver não deve
+    derrubar o pipeline inteiro — deve retornar 'inconclusivo'."""
+    with patch("src.dns_resolver.resolve", side_effect=TimeoutError):
+        resultado = pipeline.predict("http://exemplo-desconhecido.xyz")
+    assert resultado.status == "inconclusivo"
+    assert resultado.prediction is None  # sem predição espúria
+    assert resultado.error_component == "dns_resolver"  # rastreável
+
+# Teste arquitetural — verifica contrato entre componentes
+def test_feature_extractor_honra_contrato_de_interface():
+    """Invariante: Feature Extractor sempre retorna dict com as
+    chaves definidas no contrato, mesmo para inputs inválidos."""
+    CHAVES_CONTRATUAIS = {"entropy", "domain_length", "has_ip",
+                          "subdomain_count", "tld", "is_gibberish"}
+    resultado = feature_extractor.extract("url_completamente_invalida_!!!###")
+    assert CHAVES_CONTRATUAIS.issubset(resultado.keys())
+```
+
+**A implicação crítica:**
+
+> **[PEER-REVIEWED]**
+> Breck, E., Cai, S., Nielsen, E., Salib, M., & Sculley, D. (2017). *The ML Test Score.* IEEE Big Data.
+> DOI: 10.1109/BigData.2017.8258038
+> — *"A good integration test runs all the way from original data sources, through feature creation, to training, and to serving."* Isto é teste de propriedades arquiteturais — não algorítmicas.
+
+Um programador júnior testa algoritmos. Um sênior testa *contratos entre componentes* e *invariantes do sistema como um todo*. A distinção algoritmização/arquitetura determina diretamente quais testes escrever.
+
+---
+
+### 3.8 Como a Distinção Se Manifesta em Segurança: Superfície de Ataque como Estrutura Topológica
+
+A perspectiva topológica tem uma aplicação direta e poderosa em segurança: **a superfície de ataque de um sistema é uma propriedade topológica, não algorítmica**.
+
+> **[PADRÃO-NIST]**
+> Howard, M., & Lipner, S. (2006). *The Security Development Lifecycle.* Microsoft Press.
+> — O conceito de *attack surface* é definido como o conjunto de pontos de entrada que um atacante pode usar para acessar o sistema. Reduzir a superfície de ataque é reduzir este conjunto — uma operação topológica.
+
+> **[INDUSTRIAL-OWASP]**
+> OWASP Foundation. (2021). *OWASP Top Ten 2021.*
+> — A01 (Broken Access Control) e A04 (Insecure Design) são essencialmente falhas topológicas: o sistema tem uma estrutura de acesso incorreta, independentemente de qualquer algoritmo específico.
+
+**A superfície de ataque como conjunto topológico:**
+
+```
+SUPERFÍCIE DE ATAQUE = {
+  endpoints de API expostos,
+  portas abertas na rede,
+  interfaces de autenticação,
+  pontos de ingestão de dados externos,
+  dependências externas confiáveis,
+  permissões de acesso a dados
+}
+```
+
+Reduzir a superfície de ataque é **fechar elementos deste conjunto** — é uma operação diretamente topológica. O Princípio do Menor Privilégio (PoLP), definido pelo NIST SP 800-207, é a instrução de minimizar este conjunto ao mínimo necessário.
+
+**Os trade-offs de segurança são trade-offs no espaço métrico de arquiteturas:**
+
+| Decisão Arquitetural | Impacto na Segurança | Trade-off |
+|----------------------|---------------------|-----------|
+| Microsserviços vs. monolito | Menor blast radius por componente vs. maior superfície de API | Isolamento vs. complexidade |
+| Sync vs. async | Superfícies de ataque diferentes (timeout vs. queue poisoning) | Latência vs. throughput |
+| Cache compartilhado | Possível cache poisoning vs. redução de carga | Performance vs. isolamento |
+| API pública vs. interna | Maior superfície vs. menor, mais confiável | Acessibilidade vs. controle |
+
+**A implicação direta para testes de segurança:**
+
+Testes de segurança que testam apenas *algoritmos* (ex: "esta função valida o input corretamente?") perdem os ataques mais perigosos — que exploram a *topologia* do sistema (ex: "existe um caminho de acesso a dados privilegiados que contorna a autenticação porque dois componentes se comunicam sem verificação?").
+
+```python
+# Teste de segurança algorítmico (necessário mas insuficiente)
+def test_validacao_url_rejeita_javascript_scheme():
+    with pytest.raises(ValueError):
+        validate_url("javascript:alert(1)")
+
+# Teste de segurança arquitetural (captura falhas topológicas)
+def test_nao_existe_caminho_sem_autenticacao_para_predicao():
+    """Invariante arquitetural de segurança: todo caminho
+    de acesso ao endpoint de predição requer autenticação."""
+    client = TestClient(app)
+    # Tenta todos os métodos HTTP sem autenticação
+    for method in ["GET", "POST", "PUT", "PATCH"]:
+        response = client.request(method, "/api/predict",
+                                  json={"url": "http://test.com"})
+        assert response.status_code in (401, 403, 405), (
+            f"Caminho não autenticado encontrado: {method} /api/predict"
+            f" retornou {response.status_code}"
+        )
+```
+
+---
+
+### 3.9 Síntese: O Que um Sênior/Especialista Domina nos Fundamentos
+
+Um sênior ou especialista não escolhe entre raciocínio algorítmico e raciocínio arquitetural — ele sabe qual nível de abstração uma dada decisão pertence e aplica o raciocínio correto para cada nível.
+
+```
+PROBLEMA               NÍVEL CORRETO    PERGUNTAS GUIA
+───────────────────────────────────────────────────────────────────────
+Calcular entropia      Algorítmico      É correto? Qual complexidade?
+de uma string                           Como lida com Unicode?
+
+Decidir onde           Arquitetural     Quem depende disso? Como falha?
+feature extraction                      O contrato é testável?
+ocorre no pipeline
+
+Escolher sync vs.      Arquitetural     Qual o impacto em toda a
+async para HTTP                         superfície de ataque? Quais
+                                        invariantes são preservados?
+
+Verificar se um        Algorítmico      O algoritmo de hash é correto?
+hash SHA-256 confere                   Qual a probabilidade de colisão?
+
+Decidir que o modelo   Arquitetural     Onde essa verificação mora?
+deve ser verificado                     O que acontece se falhar?
+antes de carregar                       Como é testável como contrato?
+```
+
+A confusão mais comum é tratar decisões arquiteturais como se fossem algoritmos — tentando "otimizar" a implementação de algo que deveria ser *redesenhado estruturalmente*. Um sênior reconhece quando está no nível errado de abstração.
+
+---
+
+## 4. O Modelo Real: Seis Dimensões Constitutivas
 
 ### Fundamentação Geral
 
-O modelo de seis dimensões é uma síntese derivada de: Dreyfus Skill Model (framework de progressão), teoria de prática deliberada de Ericsson (dimensão de aprendizado), distinção de Brooks entre complexidade essencial e acidental, e o corpo de trabalho de engenharia de software produtivo (McConnell, Feathers, Hunt & Thomas) para dimensões de craft.
+O modelo de seis dimensões é uma síntese derivada de: Dreyfus Skill Model (framework de progressão), teoria de prática deliberada de Ericsson (dimensão de aprendizado), distinção de Brooks entre complexidade essencial e acidental, fundamentos de algoritmização e arquitetura (Seção 3), e o corpo de trabalho de engenharia de software produtivo (McConnell, Feathers, Hunt & Thomas) para dimensões de craft.
 
 ---
 
@@ -137,9 +489,7 @@ O modelo Dreyfus descreve a transição entre níveis como mudança na *natureza
 
 **Limitação documentada do modelo [PEER-REVIEWED]:** Gobet & Chassy (2008) questionaram a evidência para estágios discretos e argumentaram que experts frequentemente realizam raciocínio analítico lento, contrariando a afirmação de ação puramente intuitiva. O modelo descreve o processo do raciocínio, mas não especifica o que avaliar tecnicamente.
 
-A transição de júnior para sênior, neste framework, não é sobre acumular soluções — é sobre formar **modelos mentais abstratos transferíveis** funcionando em domínios não vistos anteriormente.
-
-**Para ML/IA:** um sênior não "sabe usar Random Forest". Ele possui modelos mentais de *bias-variance tradeoff*, *induction bias*, *generalization bounds* e *computational complexity* que permitem raciocinar sobre qualquer modelo — inclusive sobre quando **nenhum modelo** é a resposta certa.
+A transição de júnior para sênior, neste framework, não é sobre acumular soluções — é sobre formar **modelos mentais abstratos transferíveis** funcionando em domínios não vistos anteriormente. Isso inclui, especificamente, modelos mentais que operam simultaneamente no nível algorítmico e no nível arquitetural (Seção 3).
 
 ---
 
@@ -166,6 +516,8 @@ Sênior pergunta:  "Qual é a melhor solução dado este conjunto de restriçõe
                    e o que estamos abrindo mão em cada escolha?"
 ```
 
+O espaço de trade-offs é, como formalizado por Kazman et al. (1996) com o método ATAM, um **problema de otimização multi-objetivo** sobre o espaço de arquiteturas — não um problema algorítmico com solução ótima única.
+
 ---
 
 ### Dimensão 3 — Gestão da Complexidade Acidental vs. Essencial
@@ -176,7 +528,7 @@ Sênior pergunta:  "Qual é a melhor solução dado este conjunto de restriçõe
 > Brooks, F. P. (1987). *No Silver Bullet*, op. cit.
 
 > **[CLÁSSICO]**
-> Brooks, F. P. (1975). *The Mythical Man-Month: Essays on Software Engineering.* Addison-Wesley.
+> Brooks, F. P. (1975). *The Mythical Man-Month.* Addison-Wesley.
 
 Distinção de Brooks:
 - **Complexidade essencial:** inerente ao problema — não pode ser eliminada
@@ -215,20 +567,20 @@ Seniores **pensam em falha primeiro**. Para cada componente: Como isso falha? Co
 **Base empírica:**
 
 > **[PEER-REVIEWED]**
-> Kruger, J., & Dunning, D. (1999). *Unskilled and Unaware of It: How Difficulties in Recognizing One's Own Incompetence Lead to Inflated Self-Assessments.* Journal of Personality and Social Psychology, 77(6), 1121–1134.
+> Kruger, J., & Dunning, D. (1999). *Unskilled and Unaware of It.* Journal of Personality and Social Psychology, 77(6), 1121–1134.
 > DOI: 10.1037/0022-3514.77.6.1121
 
-Kruger & Dunning demonstraram que participantes no quartil inferior superestimaram dramaticamente suas habilidades (12º percentil real, 62º percentil autopercebido). A habilidade de avaliar competência em um domínio requer a própria competência que está sendo avaliada — criando um paradoxo de meta-ignorância.
+Kruger & Dunning demonstraram que participantes no quartil inferior superestimaram dramaticamente suas habilidades. A habilidade de avaliar competência em um domínio requer a própria competência que está sendo avaliada.
 
 **Nota sobre limites [DISPUTADO]:** Krueger & Mueller (2002) **[PEER-REVIEWED]** questionaram o efeito como possível artefato de regressão à média. A direção (performers fracos tendem a superestimar) tem suporte robusto; a explicação metacognitiva específica é debatida.
 
-**Implicação:** auto-avaliação pura é distorcida em *ambas* as direções — baixos performers superestimam, altos performers frequentemente subestimam. Pelo menos uma dimensão do diagnóstico requer validação externa.
+**Implicação:** auto-avaliação pura é distorcida em *ambas* as direções. Pelo menos uma dimensão do diagnóstico requer validação externa.
 
 Para ML/IA: um sênior raciocina em termos de **distribuições de outcomes**, não estimativas pontuais.
 
 ---
 
-### Dimensão 6 — Impacto Multiplicado
+### Dimensão 6 — Impacto e Transferência de Conhecimento
 
 **Base industrial:**
 
@@ -240,18 +592,20 @@ Para ML/IA: um sênior raciocina em termos de **distribuições de outcomes**, n
 > Nygard, M. (2011). *Documenting Architecture Decisions.* Cognitect Blog.
 > URL: https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions
 
-Seniores não apenas produzem trabalho de alta qualidade — eles **aumentam a capacidade da equipe ao redor deles**: code review que ensina princípios; design discussions que explicitam raciocínio tornando-o replicável; documentação que transfere contexto (não apenas descreve interfaces); identificação de riscos sistêmicos que outros não viram.
+Seniores não apenas produzem trabalho de alta qualidade — eles **aumentam a capacidade da equipe ao redor deles**: code review que ensina princípios; design discussions que explicitam raciocínio tornando-o replicável; documentação que transfere contexto; identificação de riscos sistêmicos que outros não viram.
 
 ---
 
-## 4. Sênior vs. Especialista: Uma Distinção Necessária
+## 5. Sênior vs. Especialista: Uma Distinção Necessária
 
 ### Base Teórica: Conhecimento Tácito
 
 > **[CLÁSSICO]**
 > Polanyi, M. (1966). *The Tacit Dimension.* Doubleday.
 
-Polanyi argumentou que "sabemos mais do que podemos dizer" — há formas de conhecimento que não podem ser completamente codificadas em regras ou linguagem explícita. O especialista de nível mundial possui **conhecimento tácito não-codificado** que emerge apenas da exposição intensa e prolongada ao domínio — saber *por experiência* quando uma feature vai causar leakage, reconhecer padrões de overfitting intuitivamente, entender por que um determinado fine-tuning vai degradar em exemplos out-of-distribution.
+Polanyi argumentou que "sabemos mais do que podemos dizer" — há formas de conhecimento que não podem ser completamente codificadas em regras ou linguagem explícita. O especialista de nível mundial possui **conhecimento tácito não-codificado** que emerge apenas da exposição intensa e prolongada ao domínio.
+
+Para arquitetura de sistemas, isso significa: saber *por experiência* que uma determinada topologia de comunicação vai criar um bottleneck sob carga específica — sem precisar calcular formalmente. Para ML/IA: reconhecer intuitivamente quando uma feature vai causar leakage antes de qualquer análise.
 
 | Dimensão | Sênior (Generalista) | Especialista |
 |----------|---------------------|--------------|
@@ -260,111 +614,92 @@ Polanyi argumentou que "sabemos mais do que podemos dizer" — há formas de con
 | Conhecimento tácito | Presente em múltiplos domínios | Denso e não-codificado na especialidade |
 | Valor primário | Arquitetura, decisão sistêmica, integração | Resolve o que ninguém mais consegue |
 | Risco | Superficialidade em especialidades críticas | Blind spots fora do domínio |
-| Trajetória típica | Liderança técnica, staff engineer, arquiteto | Principal engineer, researcher, domain authority |
 
 ---
 
-## 5. A Armadilha Sênior: Onde Pessoas Competentes Estacionam
+## 6. A Armadilha Sênior: Onde Pessoas Competentes Estacionam
 
 ### Base Teórica: Plateau de Expertise
 
 > **[PEER-REVIEWED]**
-> Ericsson, K. A., et al. (1993), op. cit. — Seção sobre manutenção de expertise e condições de plateau
+> Ericsson, K. A., et al. (1993), op. cit.
 
 > **[CLÁSSICO — expansão]**
 > Ericsson, K. A., & Pool, R. (2016). *Peak: Secrets from the New Science of Expertise.* Houghton Mifflin Harcourt.
 
-Ericsson identifica o plateau como o estado onde profissionais competentes param de melhorar porque: (a) o ambiente não fornece mais feedback de alta qualidade; (b) a atividade torna-se automática e deixa de exigir esforço deliberado; (c) não há exposição a problemas fora da zona de conforto.
+Ericsson identifica o plateau como o estado onde profissionais competentes param de melhorar porque: (a) o ambiente não fornece mais feedback de alta qualidade; (b) a atividade torna-se automática; (c) não há exposição a problemas fora da zona de conforto.
 
-| Sintoma | Mecanismo Subjacente | Referência |
-|---------|---------------------|-----------|
-| Expertise sem atualização | Plateau de Ericsson — prática automática sem feedback | Ericsson (1993, 2016) |
-| Pattern matching excessivo | Modelos mentais frágeis que não generalizam | Dreyfus & Dreyfus (1986) |
-| Aversão à incerteza | Competência que se tornou identidade | Dweck (2006) — mindset fixo vs. crescimento |
-| Otimização local | Resolve o problema como dado sem questioná-lo | Brooks (1987) |
+| Sintoma | Mecanismo Subjacente |
+|---------|---------------------|
+| Expertise sem atualização | Plateau de Ericsson — prática automática sem feedback |
+| Pattern matching excessivo | Modelos mentais frágeis que não generalizam |
+| Raciocínio apenas algorítmico | Nunca ter desenvolvido o nível arquitetural de análise |
+| Aversão à incerteza | Competência que se tornou identidade |
 
-**Para ML/IA:** O campo tem taxa de renovação de paradigmas de aproximadamente 18–36 meses. Expertise construída antes de transformers dominarem (pré-2018/2019) precisou de reconstrução ativa. Quem não reconstruiu ficou para trás independentemente dos anos acumulados.
+**Para ML/IA:** O campo tem taxa de renovação de paradigmas de aproximadamente 18–36 meses. Expertise construída antes de transformers dominarem (pré-2018/2019) precisou de reconstrução ativa.
 
 ---
 
-## 6. Implicações Específicas para ML/IA e Ciência de Dados
+## 7. Implicações Específicas para ML/IA e Ciência de Dados
 
 ### A Diferença Entre um Modelo que Funciona e um Modelo que Está Certo
 
 > **[PEER-REVIEWED]**
-> Breck, E., Cai, S., Nielsen, E., Salib, M., & Sculley, D. (2017). *The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction.* IEEE Big Data, pp. 1123–1132.
+> Breck, E., Cai, S., Nielsen, E., Salib, M., & Sculley, D. (2017). *The ML Test Score.* IEEE Big Data.
 > DOI: 10.1109/BigData.2017.8258038
 
-Um modelo com AUC 0.95 no hold-out set pode estar capturando correlações espúrias, dependendo de features com leakage sutil, ou funcionando por razões completamente diferentes das supostas. Breck et al. documentaram equipes experientes no Google com arquivos de mil linhas criando features centrais — completamente sem testes.
+Um modelo com AUC 0.95 no hold-out set pode estar capturando correlações espúrias, dependendo de features com leakage sutil, ou funcionando por razões completamente diferentes das supostas.
 
-Verificar **por que** o modelo funciona — e sob quais condições deixará de funcionar — é trabalho de sênior, não de júnior.
+Verificar **por que** o modelo funciona — e sob quais condições deixará de funcionar — é trabalho de sênior, não de júnior. É uma pergunta *arquitetural*, não *algorítmica*.
 
 ### Custo Total do Modelo
 
 > **[PEER-REVIEWED]**
 > Sculley et al. (2015), op. cit. — Seções "Configuration Debt" e "Pipeline Jungles"
 
-Um modelo que performa 2% melhor mas custa 10x mais para manter é frequentemente a escolha errada. Custo total = desenvolvimento + inferência em escala + monitoramento + retreinamento + manutenção de features + custo de falhas silenciosas.
-
-### Questionar a Formulação do Problema
-
-> **[PEER-REVIEWED]**
-> Sculley et al. (2015), op. cit. — "Undeclared consumers" e "hidden feedback loops"
-
-Seniores não aceitam "detectar phishing por URL" como problema final sem perguntar: qual é o objetivo real? "Minimizar tempo de exposição de usuários a conteúdo malicioso" pode ter uma solução completamente diferente de classificação de URLs — e possivelmente não centrada em ML.
+Custo total = desenvolvimento + inferência em escala + monitoramento + retreinamento + manutenção de features + custo de falhas silenciosas. Um modelo que performa 2% melhor mas custa 10x mais para manter é frequentemente a escolha errada — é uma decisão arquitetural, não algorítmica.
 
 ---
 
-## 7. Frameworks de Auto-Diagnóstico: O Que Existe
+## 8. Frameworks de Auto-Diagnóstico: O Que Existe
 
-### 7.1 Dreyfus Model — O Mais Academicamente Sólido
+### 8.1 Dreyfus Model — O Mais Academicamente Sólido
 
 > **[PEER-REVIEWED]**
 > Dreyfus & Dreyfus (1980), op. cit. — 1.433+ citações (Semantic Scholar)
 
 Descreve *como* o raciocínio muda entre níveis, mas não especifica *o quê* avaliar tecnicamente em engenharia de software ou ML.
 
-### 7.2 Programmer Competency Matrix
+### 8.2 Programmer Competency Matrix
 
 > **[INDUSTRIAL]**
 > Joseph, S. (2008). *Programmer Competency Matrix.*
 > URL: https://sijinjoseph.netlify.app/programmer-competency-matrix/
 
-Avalia em níveis 0–3: Computer Science, Software Engineering, Programming, Experience, Knowledge. **Limitação:** pré-ML; não cobre ciência de dados e engenharia de ML adequadamente.
+**Limitação:** pré-ML; não cobre ciência de dados e engenharia de ML adequadamente.
 
-### 7.3 Engineering Ladders Corporativos
+### 8.3 Engineering Ladders Corporativos
 
 > **[INDUSTRIAL]**
 > Progression.fyi — 100+ engineering ladders corporativos públicos.
 > URL: https://www.progression.fyi/
 
-> **[INDUSTRIAL]**
-> Fournier, C. (2017). *The Manager's Path.* O'Reilly.
-
-**Limitação:** escritos para avaliação externa por gestores; misturam critérios técnicos com organizacionais.
-
-### 7.4 Para ML/IA
+### 8.4 Para ML/IA
 
 | Recurso | Tipo | Cobertura |
 |---------|------|-----------|
-| ML Test Score (Breck et al., 2017) | **PEER-REVIEWED** | 28 testes de maturidade de sistemas ML |
-| Rules of ML (Zinkevich, Google) | **INDUSTRIAL** | 43 regras práticas como checklist |
+| ML Test Score (Breck et al., 2017) | **PEER-REVIEWED** | 28 testes de maturidade |
+| Rules of ML (Zinkevich, Google) | **INDUSTRIAL** | 43 regras práticas |
 | Designing ML Systems (Huyen, 2022) | **INDUSTRIAL** | ML Engineering end-to-end |
-| Hidden Technical Debt (Sculley et al., 2015) | **PEER-REVIEWED** | Modos de falha e anti-padrões |
 
 ---
 
-## 8. O Problema Estrutural: O Que os Frameworks Não Resolvem
+## 9. O Problema Estrutural: O Que os Frameworks Não Resolvem
 
 ### O Quadrante do Conhecimento Desconhecido
 
 > **[CONCEITUAL]**
-> Luft, J., & Ingham, H. (1955). *The Johari Window.* Proceedings of the Western Training Laboratory in Group Development.
-
-O quadrante crítico — "não sabe que não sabe" — só é detectável por:
-1. Exposição a problemas com feedback de alta qualidade (Ericsson et al., 1993)
-2. Feedback externo de pares seniores
-3. Um meta-framework que force questionar pressupostos
+> Luft, J., & Ingham, H. (1955). *The Johari Window.* Western Training Laboratory.
 
 ```
                          SABE QUE SABE        NÃO SABE QUE SABE
@@ -378,50 +713,49 @@ O quadrante crítico — "não sabe que não sabe" — só é detectável por:
                          SABE QUE NÃO SABE    NÃO SABE QUE NÃO SABE
 ```
 
-Checklists cobrem apenas os dois quadrantes da esquerda.
+Checklists cobrem apenas os dois quadrantes da esquerda. Os pontos cegos — incluindo gaps no raciocínio arquitetural em quem só desenvolveu raciocínio algorítmico — só são detectáveis por exposição a problemas reais com feedback de alta qualidade (Ericsson et al., 1993).
 
 ---
 
-## 9. Mapa de Auto-Diagnóstico: Os Seis Eixos
+## 10. Mapa de Auto-Diagnóstico: Os Seis Eixos
 
-**Nota metodológica:** A auto-avaliação deve ser tratada como hipótese, não diagnóstico definitivo, dado o viés documentado por Kruger & Dunning (1999). **Vagueza na resposta é o sinal de gap** — não a resposta errada em si.
+**Nota metodológica:** A auto-avaliação deve ser tratada como hipótese, não diagnóstico definitivo (Kruger & Dunning, 1999). **Vagueza na resposta é o sinal de gap**.
 
 ---
 
 ### EIXO 1 — Fundamentos Computacionais
 
-**Referência base:**
-> **[CLÁSSICO]**
-> Bryant, R. E., & O'Hallaron, D. R. (2015). *Computer Systems: A Programmer's Perspective* (3rd ed.). Pearson.
+**Referências base:**
+> **[CLÁSSICO]** Bryant, R. E., & O'Hallaron, D. R. (2015). *Computer Systems: A Programmer's Perspective* (3rd ed.). Pearson.
+> **[CLÁSSICO]** Cormen, T. H., et al. (2009). *Introduction to Algorithms* (3rd ed.). MIT Press.
 
 **Perguntas diagnósticas:**
 
 - [ ] Você consegue estimar a complexidade de um algoritmo que você *mesmo escreveu*, sem consulta?
 - [ ] Você consegue explicar por que um índice de BD melhora performance a partir de primeiros princípios?
 - [ ] Quando seu código é lento, você consegue formular uma *hipótese* sobre o gargalo antes de medir?
-- [ ] Você entende a diferença entre paralelismo e concorrência?
-- [ ] Para Python: como o GIL afeta especificamente um pipeline async/threadpool?
+- [ ] Você consegue raciocinar sobre o comportamento do GIL do Python em um pipeline async/threadpool?
+- [ ] Você distingue quando um problema de performance é algorítmico (complexidade) de quando é arquitetural (topologia de comunicação)?
 
-**Sinal de gap:** precisar de benchmark para ter qualquer intuição sobre performance, ou "depende" sem especificar *do quê*.
+**Sinal de gap:** precisar de benchmark para ter qualquer intuição sobre performance; ou não conseguir classificar se um problema de performance pertence ao nível algorítmico ou arquitetural.
 
 ---
 
 ### EIXO 2 — Fundamentos Matemático-Estatísticos para ML
 
 **Referências base:**
-> **[CLÁSSICO]** Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning* (2nd ed.). Springer. URL: https://hastie.su.domains/ElemStatLearn/
->
+> **[CLÁSSICO]** Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning* (2nd ed.). Springer.
 > **[CLÁSSICO]** Bishop, C. M. (2006). *Pattern Recognition and Machine Learning.* Springer.
 
 **Perguntas diagnósticas:**
 
 - [ ] Você consegue derivar o gradiente de MSE ou cross-entropy à mão, sem consulta?
 - [ ] Você consegue explicar o que a matriz de covariância representa geometricamente?
-- [ ] Você entende por que máxima verossimilhança e mínimos quadrados coincidem sob ruído gaussiano?
 - [ ] Você consegue formular um problema de classificação como inferência bayesiana?
 - [ ] Quando um modelo overfita, você consegue diagnosticar se o problema está no bias, variância ou ruído?
+- [ ] Você consegue identificar quando uma decisão sobre o modelo é algorítmica (ex: escolha de kernel) vs. arquitetural (ex: onde o modelo vive no pipeline)?
 
-**Sinal de gap:** operar com fórmulas sem conseguir conectá-las a intuição geométrica ou probabilística.
+**Sinal de gap:** operar com fórmulas sem intuição geométrica ou probabilística; ou não perceber a distinção algorítmica/arquitetural no contexto de ML.
 
 ---
 
@@ -429,19 +763,17 @@ Checklists cobrem apenas os dois quadrantes da esquerda.
 
 **Referências base:**
 > **[CLÁSSICO]** Feathers, M. (2004). *Working Effectively with Legacy Code.* Prentice Hall.
->
 > **[CLÁSSICO]** Martin, R. C. (2008). *Clean Code.* Prentice Hall.
->
 > **[PEER-REVIEWED]** Breck et al. (2017), op. cit.
 
 **Perguntas diagnósticas:**
 
 - [ ] Você escreve testes antes de ter certeza que o código funciona?
-- [ ] Você consegue refatorar um módulo complexo confiando na sua suite de testes?
-- [ ] Quando você lê código que escreveu 6 meses atrás, ele é autoexplicativo?
-- [ ] Você consegue articular os limites de responsabilidade de cada módulo do sistema atual?
+- [ ] Você distingue testes algorítmicos (corretude de uma função) de testes arquiteturais (contrato entre componentes)?
+- [ ] Você consegue refatorar um módulo confiando na sua suite de testes?
+- [ ] Você documenta *decisões de design* (o porquê arquitetural) — não apenas o *como* algorítmico?
 
-**Sinal de gap:** código que funciona mas que só você consegue modificar sem medo.
+**Sinal de gap:** código que funciona mas que só você consegue modificar sem medo; ou testes que cobrem apenas algoritmos mas ignoram contratos arquiteturais.
 
 ---
 
@@ -449,31 +781,17 @@ Checklists cobrem apenas os dois quadrantes da esquerda.
 
 **Referências base:**
 > **[PEER-REVIEWED]** Sculley et al. (2015), op. cit.
->
 > **[PEER-REVIEWED]** Breck et al. (2017), op. cit.
->
-> **[INDUSTRIAL]** Beyer, B. et al. (2016). *Site Reliability Engineering.* O'Reilly. URL: https://sre.google/sre-book/
+> **[INDUSTRIAL]** Beyer, B. et al. (2016). *Site Reliability Engineering.* O'Reilly.
 
 **Perguntas diagnósticas:**
 
 - [ ] Você consegue enumerar os **cinco modos de falha mais prováveis** do seu sistema em produção?
-- [ ] Você tem resposta para "o que acontece se este componente falhar às 3h sem ninguém disponível"?
 - [ ] Para ML: você monitora *data drift* ativamente, ou apenas performance do modelo?
-- [ ] Você consegue distinguir falha de modelagem de falha de engenharia quando um modelo degrada?
+- [ ] Você pensa nos failure modes *antes* de implementar, não apenas quando eles acontecem?
+- [ ] Você distingue falhas algorítmicas (bug no cálculo de feature) de falhas arquiteturais (componente que falha silenciosamente sem propagar erro)?
 
-**Exercício diagnóstico para ML/IA — responda para seu sistema atual:**
-
-```
-1. O que acontece se o extrator de features receber URL malformada?
-2. O que acontece se a chamada de DNS sofrer timeout?
-3. O que acontece se o modelo receber feature fora do range de treino?
-4. O que acontece com domínios IDN (International Domain Names com Unicode)?
-5. O que acontece em 6 meses quando o padrão de phishing evoluir?
-```
-
-A pergunta 5 é a mais crítica — é *distribution shift*, o modo de falha mais documentado em sistemas ML em produção (Sculley et al., 2015).
-
-**Sinal de gap:** pensar no sistema apenas em termos do *happy path*.
+**Sinal de gap:** pensar no sistema apenas em termos do *happy path*; ou não perceber a diferença entre falhas algorítmicas e falhas arquiteturais.
 
 ---
 
@@ -481,18 +799,14 @@ A pergunta 5 é a mais crítica — é *distribution shift*, o modo de falha mai
 
 **Referências base:**
 > **[PEER-REVIEWED]** Kruger & Dunning (1999), op. cit.
->
 > **[PEER-REVIEWED]** Ericsson et al. (1993), op. cit.
 
 **Perguntas diagnósticas:**
 
-- [ ] Quando você faz uma estimativa de prazo, você consegue dar um *intervalo*, não apenas um ponto?
-- [ ] Após um projeto, você consegue identificar especificamente onde sua estimativa estava errada — e *por que*?
 - [ ] Você distingue "não sei porque nunca estudei" de "não sei porque o campo não tem consenso"?
-- [ ] Ao ler um paper, você identifica o que o autor está *assumindo* sem explicitar?
+- [ ] Ao ler um paper ou tutorial, você identifica o que o autor está *assumindo* sem explicitar?
+- [ ] Você consegue classificar se uma dúvida sua pertence ao nível algorítmico ou ao nível arquitetural?
 - [ ] Você busca ativamente contextos onde você *não* é a pessoa mais experiente?
-
-**Sinal de gap:** estimativas consistentemente otimistas, ou desconforto genuíno em ambientes de alta incerteza.
 
 ---
 
@@ -500,27 +814,23 @@ A pergunta 5 é a mais crítica — é *distribution shift*, o modo de falha mai
 
 **Referências base:**
 > **[INDUSTRIAL]** Google Engineering Practices, op. cit.
-
-> **[CLÁSSICO]** Nygard, M. (2011). *Documenting Architecture Decisions*, op. cit.
+> **[CLÁSSICO]** Nygard, M. (2011), op. cit.
 
 **Perguntas diagnósticas:**
 
-- [ ] Você consegue explicar uma decisão técnica complexa para alguém fora da área sem perder substância?
-- [ ] Quando você faz code review, você ensina o *princípio* ou apenas aponta o erro?
-- [ ] Você documenta *decisões de design* (o porquê) — não apenas interfaces (o como)?
-
-**Sinal de gap:** conhecimento represado em você, ou explicações que exigem que o outro já saiba quase tudo para entender.
+- [ ] Você consegue explicar a diferença entre uma decisão algorítmica e uma decisão arquitetural para alguém fora da área?
+- [ ] Quando você faz code review, você identifica quando uma solução algorítmica está tentando resolver um problema arquitetural?
+- [ ] Você documenta *decisões arquiteturais* (ADRs) — não apenas interfaces?
 
 ---
 
-## 10. Perfil Diagnóstico: Caso Aplicado
+## 11. Perfil Diagnóstico: Caso Aplicado
 
 ### Perfil
 
 - **Formação:** Matemática — IME-USP
 - **Atuação:** ML/NLP Engineer, full-cycle
 - **Projeto atual:** TCC — pipeline de detecção de phishing (feature extraction, Gibberish Detector recalibrado, async/threadpool, Random Forest com análise de estabilidade de Lyapunov)
-- **Estudo ativo:** Hastie et al. (ESL), Bishop (PRML)
 
 ### Resultado do Diagnóstico
 
@@ -533,88 +843,80 @@ EIXO 5 · Meta-cognição e Calibração    ████████░░  Fort
 EIXO 6 · Impacto e Transferência       ████░░░░░░  Consciente, Não Desenvolvido
 ```
 
-> *Asterisco no Eixo 1: intuição de performance declarada precisa de validação para domínios além dos já vistos, dado que background em matemática pura tipicamente não cobre sistemas operacionais, modelos de memória e networking (Bryant & O'Hallaron, 2015).*
+### Interpretação com o Novo Contexto de Fundamentos
 
-### Interpretação
+**Sobre a Seção 3 e este perfil:** A formação em matemática pura do IME-USP produz acesso direto ao raciocínio topológico que fundamenta a arquitetura de sistemas — uma vantagem estrutural que a maioria dos engenheiros não tem. A intuição sobre espaços, invariantes e estruturas mínimas transfere naturalmente para raciocínio arquitetural, uma vez que o vocabulário de sistemas é adquirido.
 
-**Ativo diferencial real:** Eixo 2 coloca este perfil em percentil muito pequeno de profissionais de ML. A maioria que se autointitula "sênior" opera principalmente no nível de chamadas de API de bibliotecas sem derivação de fundamentos.
+O gap não é de modo de raciocínio — é de vocabulário e exposição a problemas concretos de sistemas. Isto é substancialmente mais fácil de fechar do que o inverso (construir intuição matemática em cima de hábitos de engenharia).
+
+**Ativo diferencial real:** Eixo 2 coloca este perfil em percentil muito pequeno de profissionais de ML.
 
 **Assimetria central:** background matemático de pesquisador + hábitos de engenharia de cientista de dados júnior. O trabalho é fechar essa assimetria sem perder o diferencial matemático.
 
-**Ponto cego de risco:** profundidade matemática pode criar armadilha de subestimar gaps de engenharia por considerá-los "menos nobres". Esse viés é consistente com o componente de subestimação do Dunning-Kruger em performers competentes — alta competência em uma dimensão distorce a percepção de gaps em outras.
-
 ---
 
-## 11. Plano de Prioridades: O Que Atacar e Em Que Ordem
+## 12. Plano de Prioridades: O Que Atacar e Em Que Ordem
 
 ### PRIORIDADE 1 — Eixo 3: Testes Automatizados
 
-**Fundamento (Breck et al., 2017 [PEER-REVIEWED]):**
-> "Checklists are helpful even for expert teams. One team we worked with discovered a thousand-line code file, completely untested, that created their input features. Code of that size, even if it contains only simple and straightforward logic, will likely have bugs."
+> **[PEER-REVIEWED]**
+> Breck et al. (2017), op. cit. — *"One team discovered a thousand-line code file, completely untested, that created their input features."*
 
-**Protocolo concreto:**
+**Protocolo concreto (guiado pela distinção algorítmico/arquitetural):**
 
-1. Comece pelos módulos mais determinísticos (feature extraction)
-2. Use `pytest` com fixtures para isolar dependências externas
-3. Meta mínima: testes de fumaça + contrato + regressão para núcleo do pipeline
-4. Regra: nunca corrigir bug sem escrever primeiro o teste que o reproduz
+1. Testes algorítmicos primeiro: corretude de `feature_extraction.py` com entradas conhecidas
+2. Testes arquiteturais depois: contratos entre componentes e comportamento sob falha
+3. Regra permanente: nunca corrigir bug sem escrever o teste que o reproduz
 
 **Referência de implementação:**
-> **[CLÁSSICO]** Feathers, M. (2004), op. cit. — escrito para código sem testes que precisa ser testado retroativamente.
+> **[CLÁSSICO]** Feathers, M. (2004), op. cit.
 
 ---
 
 ### PRIORIDADE 2 — Eixo 4: Mapeamento de Failure Modes
 
-**Fundamento (Sculley et al., 2015 [PEER-REVIEWED]):**
-> "Systems ML have a special capacity for incurring technical debt [...] Hidden debt is dangerous because it compounds silently."
+> **[PEER-REVIEWED]**
+> Sculley et al. (2015), op. cit.
 
 **Protocolo concreto:**
 
-1. Para cada componente do pipeline, enumere os failure modes explicitamente
-2. Categorize por: probabilidade × severidade
-3. Para ML: adicione monitoramento de data drift — não apenas performance do modelo
-4. Documente decisões de design com o porquê (formato ADR — Nygard, 2011)
-
-**Ferramenta:** Failure Mode and Effects Analysis (FMEA) — originada na engenharia aeroespacial (NASA, 1960s), aplicável a sistemas de software e ML.
+1. Mapear failure modes por nível: algorítmicos (bug no cálculo) vs. arquiteturais (componente que falha silenciosamente)
+2. Para ML: adicionar monitoramento de data drift — não apenas performance
+3. Documentar decisões de design com ADRs (Nygard, 2011)
 
 ---
 
-### PRIORIDADE 3 — Eixo 1: Verificação de Fundamentos de Sistemas
+### PRIORIDADE 3 — Eixo 1: Fundamentos Computacionais + Arquiteturais
 
-**Referência:**
-> **[CLÁSSICO]** Bryant & O'Hallaron (2015) — capítulos sobre memória, processos e I/O.
+> **[CLÁSSICO]** Bryant & O'Hallaron (2015), capítulos 12-13 (concorrência, I/O)
+> **[CLÁSSICO]** Bass, Clements & Kazman (2021), *Software Architecture in Practice*
 
-**Teste diagnóstico rápido:** Como o GIL do Python afeta especificamente um pipeline async/threadpool?
-- Resposta clara e derivável → Eixo 1 está sólido
-- "Sei que afeta, mas não sei exatamente como" → esse é o gap a fechar
+**Teste diagnóstico rápido:** Como o GIL do Python afeta especificamente um pipeline async/threadpool? Se a resposta é derivável e clara: sólido. Se é "sei que afeta mas não consigo derivar": esse é o gap a fechar.
 
 ---
 
 ### PRIORIDADE 4 — Eixo 6: Transferência e Conteúdo
 
-O espaço de conteúdo técnico de alto rigor em português é genuinamente pouco explorado. Um produtor com background IME-USP + ML engineering + rigor matemático tem diferencial sustentável. Fechar os Eixos 3 e 4 primeiro gera material concreto e honesto.
+Fechar os Eixos 3 e 4 gera material concreto: *"Como apliquei raciocínio topológico a decisões arquiteturais no meu TCC"* é um conteúdo com diferencial genuíno — conecta matemática rigorosa a engenharia prática de forma que poucos profissionais podem fazer.
 
 ---
 
-## 12. Como Usar Este Guia na Prática
+## 13. Como Usar Este Guia na Prática
 
 ### Protocolo de Auto-Avaliação
-
-**Fundamentado em Ericsson et al. (1993) e Kruger & Dunning (1999):**
 
 ```
 1. Auto-avaliação inicial
    → Responda as perguntas de cada eixo com máxima honestidade
+   → Classifique cada gap: algorítmico ou arquitetural
    → Vagueza = sinal de gap
 
 2. Validação externa — OBRIGATÓRIA (Kruger & Dunning, 1999)
    → Pelo menos um eixo validado por alguém que pode observar seu trabalho
-   → Auto-avaliação pura é distorcida em ambas as direções
 
 3. Identificação do eixo limitante
    → Qual eixo, se fortalecido, teria maior impacto nos outros?
-   → Gaps em Eixos 1 e 2 (fundamentos) contaminam todos os outros
+   → Gaps nos Eixos 1 e 2 (fundamentos) contaminam todos os outros
 
 4. Revisão periódica — a cada 3–6 meses
    → Prática deliberada requer monitoramento contínuo (Ericsson et al., 1993)
@@ -622,120 +924,151 @@ O espaço de conteúdo técnico de alto rigor em português é genuinamente pouc
 
 ### Limitações Deste Guia
 
-- **Não substitui feedback de pares seniores.** Pontos cegos só são detectáveis por exposição a problemas que você não saberia que não saberia resolver (Johari window — quadrante IV).
-- **Não é linear.** Você pode ser proficiente no Eixo 2 e beginner no Eixo 3. A progressão não é uniforme.
-- **Auto-avaliação tem limitações estruturais documentadas** (Kruger & Dunning, 1999). Trate os resultados como hipóteses a validar.
+- **Não substitui feedback de pares seniores.** Pontos cegos só são detectáveis por exposição a problemas reais.
+- **Não é linear.** A progressão não é uniforme entre eixos.
+- **Auto-avaliação tem limitações estruturais documentadas** (Kruger & Dunning, 1999).
 
 ---
 
-## 13. Referências Completas
+## 14. Referências Completas
 
 ### Artigos Acadêmicos (Peer-Reviewed)
 
-1. **Dreyfus, S. E., & Dreyfus, H. L.** (1980). *A Five-Stage Model of the Mental Activities Involved in Directed Skill Acquisition.* Operations Research Center, UC Berkeley. ORC 80-2.
-   - URL: https://apps.dtic.mil/sti/tr/pdf/ADA084551.pdf
-   - Citações: 1.433+ (Semantic Scholar)
-   - **Relevância:** Framework de progressão de expertise — base do modelo de dimensões
+1. **Dreyfus, S. E., & Dreyfus, H. L.** (1980). *A Five-Stage Model of the Mental Activities Involved in Directed Skill Acquisition.* ORC 80-2. UC Berkeley.
+   URL: https://apps.dtic.mil/sti/tr/pdf/ADA084551.pdf
+   — **Relevância:** Framework de progressão de expertise
 
-2. **Ericsson, K. A., Krampe, R. T., & Tesch-Römer, C.** (1993). *The Role of Deliberate Practice in the Acquisition of Expert Performance.* Psychological Review, 100(3), 363–406.
-   - DOI: 10.1037/0033-295X.100.3.363
-   - Citações: 9.000+ (Google Scholar, 2018)
-   - **Relevância:** Prática deliberada vs. tempo de exposição; base para "densidade de reflexão"
+2. **Ericsson, K. A., Krampe, R. T., & Tesch-Römer, C.** (1993). *The Role of Deliberate Practice.* Psychological Review, 100(3), 363–406.
+   DOI: 10.1037/0033-295X.100.3.363
+   — **Relevância:** Prática deliberada vs. tempo de exposição
 
-3. **Kruger, J., & Dunning, D.** (1999). *Unskilled and Unaware of It.* Journal of Personality and Social Psychology, 77(6), 1121–1134.
-   - DOI: 10.1037/0022-3514.77.6.1121
-   - **Relevância:** Viés de auto-avaliação; necessidade de validação externa
+3. **Kruger, J., & Dunning, D.** (1999). *Unskilled and Unaware of It.* JPSP, 77(6), 1121–1134.
+   DOI: 10.1037/0022-3514.77.6.1121
+   — **Relevância:** Viés de auto-avaliação; necessidade de validação externa
 
-4. **Macnamara, B. N., & Maitra, M.** (2019). *The role of deliberate practice in expert performance: revisiting Ericsson, Krampe & Tesch-Römer (1993).* Royal Society Open Science, 6(8): 190327.
-   - DOI: 10.1098/rsos.190327
-   - **Relevância:** Revisão crítica de Ericsson — efeito real mas menor que o original
+4. **Macnamara, B. N., & Maitra, M.** (2019). *The role of deliberate practice: revisiting Ericsson (1993).* Royal Society Open Science, 6(8): 190327.
+   DOI: 10.1098/rsos.190327
+   — **Relevância:** Revisão crítica de Ericsson
 
-5. **Krueger, J., & Mueller, R. A.** (2002). *Unskilled, unaware, or both?* Journal of Personality and Social Psychology, 82(2), 180–188.
-   - DOI: 10.1037/0022-3514.82.2.180
-   - **Relevância:** Crítica do efeito Dunning-Kruger como possível artefato estatístico
+5. **Krueger, J., & Mueller, R. A.** (2002). *Unskilled, unaware, or both?* JPSP, 82(2), 180–188.
+   DOI: 10.1037/0022-3514.82.2.180
+   — **Relevância:** Crítica do efeito Dunning-Kruger
 
-6. **Sculley, D., Holt, G., Golovin, D., et al.** (2015). *Hidden Technical Debt in Machine Learning Systems.* NeurIPS, 28, pp. 2503–2511.
-   - URL: https://papers.nips.cc/paper/5656-hidden-technical-debt-in-machine-learning-systems
-   - **Relevância:** Modos de falha em ML/IA; Dimensão 4
+6. **Sculley, D., et al.** (2015). *Hidden Technical Debt in ML Systems.* NeurIPS, 28.
+   URL: https://papers.nips.cc/paper/5656
+   — **Relevância:** Modos de falha em ML/IA; Eixo 4
 
-7. **Breck, E., Cai, S., Nielsen, E., Salib, M., & Sculley, D.** (2017). *The ML Test Score.* IEEE Big Data, pp. 1123–1132.
-   - DOI: 10.1109/BigData.2017.8258038
-   - **Relevância:** Testes em sistemas ML; Dimensões 3 e 4
+7. **Breck, E., et al.** (2017). *The ML Test Score.* IEEE Big Data.
+   DOI: 10.1109/BigData.2017.8258038
+   — **Relevância:** Testes em sistemas ML; Eixos 3 e 4
+
+8. **Gilbert, S., & Lynch, N.** (2002). *Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services.* ACM SIGACT News, 33(2), 51–59.
+   DOI: 10.1145/564585.564601
+   — **Relevância:** Teorema CAP como invariante arquitetural com prova formal; trade-offs arquiteturais
+
+9. **Kazman, R., Abowd, G., Bass, L., & Clements, P.** (1996). *Scenario-Based Analysis of Software Architecture.* IEEE Software, 13(6), 47–55.
+   DOI: 10.1109/52.542294
+   — **Relevância:** ATAM; trade-offs arquiteturais como problema de otimização multi-objetivo
+
+10. **Milner, R.** (1999). *Communicating and Mobile Systems: The π-Calculus.* Cambridge University Press.
+    — **Relevância:** Topologia dinâmica em sistemas concorrentes; formalização de pipelines async
 
 ### Obras de Referência Clássicas
 
-8. **Dreyfus, H. L., & Dreyfus, S. E.** (1986). *Mind Over Machine.* Free Press.
-   - **Relevância:** Expansão detalhada do modelo de cinco estágios
+11. **Dreyfus, H. L., & Dreyfus, S. E.** (1986). *Mind Over Machine.* Free Press.
+    — **Relevância:** Expansão do modelo de cinco estágios
 
-9. **Brooks, F. P.** (1987). *No Silver Bullet.* IEEE Computer, 20(4), 10–19.
-   - **Relevância:** Complexidade essencial vs. acidental — Dimensão 3
+12. **Brooks, F. P.** (1987). *No Silver Bullet.* IEEE Computer, 20(4), 10–19.
+    — **Relevância:** Complexidade essencial vs. acidental; Dimensão 3
 
-10. **Brooks, F. P.** (1975). *The Mythical Man-Month.* Addison-Wesley.
-    - **Relevância:** Complexidade de sistemas, gestão de projetos
+13. **Brooks, F. P.** (1975). *The Mythical Man-Month.* Addison-Wesley.
+    — **Relevância:** Distinção arquitetura vs. implementação; complexidade de sistemas
 
-11. **Dijkstra, E. W.** (1974). *On the Role of Scientific Thought.* EWD 447.
-    - URL: https://www.cs.utexas.edu/users/EWD/transcriptions/EWD04xx/EWD447.html
-    - **Relevância:** Simplicidade como virtude — epígrafe e Dimensão 1
+14. **Dijkstra, E. W.** (1974). *On the Role of Scientific Thought.* EWD 447.
+    URL: https://www.cs.utexas.edu/users/EWD/transcriptions/EWD04xx/EWD447.html
+    — **Relevância:** Simplicidade como virtude; epígrafe do documento
 
-12. **Polanyi, M.** (1966). *The Tacit Dimension.* Doubleday.
-    - **Relevância:** Conhecimento tácito — base teórica da distinção sênior/especialista
+15. **Polanyi, M.** (1966). *The Tacit Dimension.* Doubleday.
+    — **Relevância:** Conhecimento tácito; distinção sênior/especialista
 
-13. **Hastie, T., Tibshirani, R., & Friedman, J.** (2009). *The Elements of Statistical Learning* (2nd ed.). Springer.
-    - URL gratuita: https://hastie.su.domains/ElemStatLearn/
-    - **Relevância:** Rigor matemático para ML — Eixo 2
+16. **Knuth, D. E.** (1997). *The Art of Computer Programming, Vol. 1* (3rd ed.). Addison-Wesley.
+    — **Relevância:** Definição formal e canônica de algoritmo; fundamentos de algoritmização
 
-14. **Bishop, C. M.** (2006). *Pattern Recognition and Machine Learning.* Springer.
-    - **Relevância:** ML bayesiano e probabilístico com rigor matemático — Eixo 2
+17. **Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C.** (2009). *Introduction to Algorithms* (3rd ed.). MIT Press.
+    — **Relevância:** Análise de complexidade; corretude; raciocínio algorítmico rigoroso
 
-15. **Bryant, R. E., & O'Hallaron, D. R.** (2015). *Computer Systems: A Programmer's Perspective* (3rd ed.). Pearson.
-    - **Relevância:** Fundamentos de sistemas — Eixo 1
+18. **Munkres, J. R.** (2000). *Topology* (2nd ed.). Prentice Hall.
+    — **Relevância:** Definição formal de topologia; intersecção com raciocínio arquitetural
 
-16. **Feathers, M.** (2004). *Working Effectively with Legacy Code.* Prentice Hall.
-    - **Relevância:** Testes em código legado — Eixo 3, Prioridade 1
+19. **Steenrod, N.** (1951). *The Topology of Fibre Bundles.* Princeton University Press.
+    — **Relevância:** Estrutura de fibrado; distinção entre topologia arquitetural e regras de negócio
 
-17. **Martin, R. C.** (2008). *Clean Code.* Prentice Hall.
-    - **Relevância:** Craft de engenharia de software — Eixo 3
+20. **Bass, L., Clements, P., & Kazman, R.** (2021). *Software Architecture in Practice* (4th ed.). Addison-Wesley.
+    — **Relevância:** Definição canônica de arquitetura de software; atributos de qualidade
 
-18. **Hunt, A., & Thomas, D.** (1999). *The Pragmatic Programmer.* Addison-Wesley.
-    - **Relevância:** Julgamento sobre trade-offs — Dimensão 2
+21. **Martin, R. C.** (2017). *Clean Architecture.* Prentice Hall.
+    — **Relevância:** Arquitetura como forma que facilita desenvolvimento, operação e manutenção
 
-19. **McConnell, S.** (2004). *Code Complete* (2nd ed.). Microsoft Press.
-    - **Relevância:** Craft de engenharia de software; decisões de design — Dimensão 2
+22. **Hastie, T., Tibshirani, R., & Friedman, J.** (2009). *The Elements of Statistical Learning* (2nd ed.). Springer.
+    URL gratuita: https://hastie.su.domains/ElemStatLearn/
+    — **Relevância:** Rigor matemático para ML; Eixo 2
 
-20. **Ericsson, K. A., & Pool, R.** (2016). *Peak: Secrets from the New Science of Expertise.* Houghton Mifflin Harcourt.
-    - **Relevância:** Plateau de expertise — Seção 5
+23. **Bishop, C. M.** (2006). *Pattern Recognition and Machine Learning.* Springer.
+    — **Relevância:** ML bayesiano com rigor matemático; Eixo 2
+
+24. **Bryant, R. E., & O'Hallaron, D. R.** (2015). *Computer Systems: A Programmer's Perspective* (3rd ed.). Pearson.
+    — **Relevância:** Fundamentos de sistemas; Eixo 1
+
+25. **Feathers, M.** (2004). *Working Effectively with Legacy Code.* Prentice Hall.
+    — **Relevância:** Testes em código legado; Eixo 3
+
+26. **Martin, R. C.** (2008). *Clean Code.* Prentice Hall.
+    — **Relevância:** Craft de engenharia de software; Eixo 3
+
+27. **Hunt, A., & Thomas, D.** (1999). *The Pragmatic Programmer.* Addison-Wesley.
+    — **Relevância:** Julgamento sobre trade-offs; Dimensão 2
+
+28. **McConnell, S.** (2004). *Code Complete* (2nd ed.). Microsoft Press.
+    — **Relevância:** Craft de engenharia; decisões de design; Dimensão 2
+
+29. **Ericsson, K. A., & Pool, R.** (2016). *Peak.* Houghton Mifflin Harcourt.
+    — **Relevância:** Plateau de expertise; Seção 6
 
 ### Fontes Industriais e Guias Técnicos
 
-21. **Zinkevich, M.** *Rules of Machine Learning: Best Practices for ML Engineering.* Google.
-    - URL: https://developers.google.com/machine-learning/guides/rules-of-ml
-    - **Relevância:** 43 regras práticas de ML Engineering
+30. **Zinkevich, M.** *Rules of Machine Learning.* Google.
+    URL: https://developers.google.com/machine-learning/guides/rules-of-ml
+    — **Relevância:** 43 regras práticas de ML Engineering
 
-22. **Huyen, C.** (2022). *Designing Machine Learning Systems.* O'Reilly.
-    - **Relevância:** ML Engineering em produção — o mais completo na área
+31. **Huyen, C.** (2022). *Designing Machine Learning Systems.* O'Reilly.
+    — **Relevância:** ML Engineering em produção
 
-23. **Beyer, B., Jones, C., Petoff, J., & Murphy, N. R.** (Eds.) (2016). *Site Reliability Engineering.* O'Reilly.
-    - URL gratuita: https://sre.google/sre-book/
-    - **Relevância:** Observabilidade e monitoramento — Eixo 4
+32. **Beyer, B., et al.** (2016). *Site Reliability Engineering.* O'Reilly.
+    URL: https://sre.google/sre-book/
+    — **Relevância:** Observabilidade e monitoramento; Eixo 4
 
-24. **Joseph, S.** (2008). *Programmer Competency Matrix.*
-    - URL: https://sijinjoseph.netlify.app/programmer-competency-matrix/
-    - **Relevância:** Framework prático de competências técnicas (com limitações)
+33. **Joseph, S.** (2008). *Programmer Competency Matrix.*
+    URL: https://sijinjoseph.netlify.app/programmer-competency-matrix/
+    — **Relevância:** Framework de competências técnicas
 
-25. **Nygard, M.** (2011). *Documenting Architecture Decisions.* Cognitect Blog.
-    - URL: https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions
-    - **Relevância:** Documentação de decisões de design — Eixo 6
+34. **Nygard, M.** (2011). *Documenting Architecture Decisions.* Cognitect Blog.
+    URL: https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions
+    — **Relevância:** ADRs; documentação de decisões arquiteturais
 
-26. **Google Engineering Practices.** *Code Review Developer Guide.*
-    - URL: https://google.github.io/eng-practices/
-    - **Relevância:** Code review como transferência de conhecimento — Dimensão 6
+35. **Google Engineering Practices.** *Code Review Developer Guide.*
+    URL: https://google.github.io/eng-practices/
+    — **Relevância:** Code review; transferência de conhecimento; Dimensão 6
 
-27. **Fournier, C.** (2017). *The Manager's Path.* O'Reilly.
-    - **Relevância:** Engineering ladders e progressão de carreira técnica
+36. **Howard, M., & Lipner, S.** (2006). *The Security Development Lifecycle.* Microsoft Press.
+    — **Relevância:** Superfície de ataque como propriedade arquitetural; SDL
 
-28. **Progression.fyi.** *Engineering Ladders Repository.*
-    - URL: https://www.progression.fyi/
-    - **Relevância:** Agrega 100+ frameworks de carreira corporativos públicos
+37. **OWASP Foundation.** (2021). *OWASP Top Ten 2021.*
+    URL: https://owasp.org/Top10/
+    — **Relevância:** A01 (Broken Access Control) e A04 (Insecure Design) como falhas arquiteturais
+
+38. **NIST SP 800-207** (2020). *Zero Trust Architecture.*
+    DOI: 10.6028/NIST.SP.800-207
+    — **Relevância:** Superfície de ataque mínima; PoLP como princípio topológico
 
 ---
 
@@ -747,24 +1080,29 @@ O espaço de conteúdo técnico de alto rigor em português é genuinamente pouc
 | Expertise progride em estágios qualitativos distintos | Dreyfus & Dreyfus (1980) | **PEER-REVIEWED** | Questionado por Gobet & Chassy (2008) |
 | Auto-avaliação é distorcida em ambas as direções | Kruger & Dunning (1999) | **PEER-REVIEWED** | Questionado como artefato estatístico (Krueger, 2002) |
 | Complexidade acidental vs. essencial | Brooks (1987) | **CLÁSSICO** | Amplamente aceito; argumento lógico |
+| Algoritmo: definição formal com 5 propriedades | Knuth (1997) | **CLÁSSICO** | Definição canônica da área; amplamente aceita |
+| Arquitetura: conjunto mínimo de estruturas para raciocínio | Bass, Clements & Kazman (2021) | **CLÁSSICO** | Definição canônica; amplamente adotada |
+| Raciocínio topológico como base do arquitetural | Munkres (2000) + Bass et al. (2021) | **CLÁSSICO** | Analogia estruturalmente defensável; não testável empiricamente como afirmação direta |
+| Estrutura de fibrado para base + regras de negócio | Steenrod (1951) + argumento conceitual | **CLÁSSICO + CONCEITUAL** | Analogia matematicamente precisa; não é uma afirmação empírica sobre sistemas |
+| Teorema CAP como invariante arquitetural formal | Gilbert & Lynch (2002) | **PEER-REVIEWED** | Prova matemática formal; amplamente citado |
+| π-Cálculo para topologia dinâmica em sistemas concorrentes | Milner (1999) | **PEER-REVIEWED** | Formalização rigorosa; menos amplamente conhecida na indústria |
 | Modos de falha silenciosos em sistemas ML | Sculley et al. (2015) | **PEER-REVIEWED** | Derivado empiricamente no Google |
 | Especialistas possuem conhecimento tácito não-codificado | Polanyi (1966) | **CLÁSSICO** | Filosófico; não testável empiricamente de forma direta |
 | Seniores escrevem código mais simples, não mais complexo | Dijkstra (1974); Hunt & Thomas (1999) | **CLÁSSICO** | Argumento lógico amplamente aceito |
-| "Regra das 10.000 horas" como condição suficiente | Gladwell (2008) | **DISPUTADO** | Simplificação repudiada pelo próprio Ericsson |
 
 ---
 
 ## Síntese Final
 
-> **Ser sênior ou especialista não é uma quantidade de conhecimento — é uma qualidade de raciocínio.**
+> **Ser sênior ou especialista não é uma quantidade de conhecimento — é uma qualidade de raciocínio que opera simultaneamente em dois níveis distintos: o algorítmico e o arquitetural.**
 >
 > Em termos do modelo Dreyfus (1980), é a capacidade de operar no nível de proficiency ou expertise: percepção holística de situações, desvio consciente e fundamentado de regras, ação baseada em modelos mentais abstratos transferíveis entre domínios.
 >
+> A distinção entre algoritmização e arquitetura não é apenas conceitual — ela determina diretamente o que testar, o que monitorar, como estruturar a segurança, e como documentar decisões de design. Um profissional que opera apenas no nível algorítmico produz soluções localmente corretas e globalmente frágeis.
+>
 > O critério mais discriminante, na prática:
 >
-> *"Um sênior pode ser colocado diante de um problema que nunca viu, em um domínio que conhece parcialmente, com restrições ambíguas — e produzir um processo de análise e decisão que seja confiavelmente mais útil do que o de alguém com menos experiência."*
->
-> A seniority é, fundamentalmente, a capacidade de operar com competência **na presença de incerteza e ambiguidade** — que é exatamente o estado permanente de qualquer problema real de engenharia ou ciência de dados.
+> *"Um sênior pode ser colocado diante de um problema que nunca viu, em um domínio que conhece parcialmente, com restrições ambíguas — e produzir um processo de análise e decisão que seja confiavelmente mais útil do que o de alguém com menos experiência — porque ele sabe qual nível de abstração o problema pertence."*
 
 ---
 
